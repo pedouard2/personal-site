@@ -53,5 +53,6 @@ export const educationCollection = defineCollection({
 export const collections = {
     'workExperience': workExperienceCollection,
     'education': educationCollection,
+    'blog': blog
   };
 
