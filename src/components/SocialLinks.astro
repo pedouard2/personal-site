@@ -1,0 +1,27 @@
+---
+// SocialLinks.astro
+import SocialIcon from "./SocialIcon.astro";
+import Github from "../assets/icons/github.svg";
+import Linkedin from "../assets/icons/linkedin.svg";
+
+const socialLinks = [
+  {
+    name: "GitHub",
+    url: "https://github.com/yourusername",
+    Icon: Github,
+  },
+  {
+    name: "LinkedIn",
+    url: "https://linkedin.com/in/yourprofile",
+    Icon: Linkedin,
+  },
+];
+---
+
+<ul class="flex justify-center gap-6 mt-8 md:gap-8 sm:justify-start">
+  {
+    socialLinks.map(({ name, url, Icon }) => (
+      <SocialIcon name={name} url={url} Icon={Icon} />
+    ))
+  }
+</ul>

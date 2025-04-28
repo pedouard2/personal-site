@@ -37,13 +37,13 @@ export const workExperienceCollection = defineCollection({
 export const educationCollection = defineCollection({
     loader: glob({ pattern: '**/[^_]*.md', base: "./src/education" }),
     schema: z.object({
-      degree: z.string(),
-      institution: z.string(),
-      location: z.string(),
-      graduationDate: z.date(),
-      fieldOfStudy: z.string(),
-      gpa: z.string().optional(),
-      relevantCoursework: z.array(z.string()).optional(),
+      degree: z.string(), // university degree
+      institution: z.string(), // institution
+      location: z.string(), // city,state
+      graduationDate: z.date(), //date of graduation
+      fieldOfStudy: z.string(), // major
+      gpa: z.string().optional(), // gpa
+      relevantCoursework: z.array(z.string()).optional(), // courses
     })
   });
   
