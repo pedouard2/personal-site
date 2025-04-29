@@ -4,7 +4,7 @@ import { glob } from "astro/loaders";
 import { z, defineCollection } from "astro:content";
 // Define a `loader` and `schema` for each collection
 const blog = defineCollection({
-    loader: glob({ pattern: '**/[^_]*.md', base: "./src/blog" }),
+    loader: glob({ pattern: '**/[^_]*.md', base: "./src/content/blog" }),
     schema: z.object({
       title: z.string(),
       pubDate: z.date(),
@@ -20,7 +20,7 @@ const blog = defineCollection({
 
 
 export const workExperienceCollection = defineCollection({
-    loader: glob({ pattern: '**/[^_]*.md', base: "./src/job" }),
+    loader: glob({ pattern: '**/[^_]*.md', base: "./src/content/job" }),
     schema: z.object({
       title: z.string(), // Job title
       company: z.string(), // Company name
@@ -35,7 +35,7 @@ export const workExperienceCollection = defineCollection({
 
 
 export const educationCollection = defineCollection({
-    loader: glob({ pattern: '**/[^_]*.md', base: "./src/education" }),
+    loader: glob({ pattern: '**/[^_]*.md', base: "./src/content/education" }),
     schema: z.object({
       degree: z.string(), // university degree
       institution: z.string(), // institution
