@@ -1,0 +1,51 @@
+/* Import Fonts: Merriweather (Body/Serif) and Helvetica/Arial (Headers) */
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap");
+
+:root {
+  --paper-bg: #fdfbf7;
+  --ink-color: #2a2a2a;
+  --accent-color: #d64545; /* Red ink for links/accents */
+}
+
+body {
+  background-color: var(--paper-bg);
+  color: var(--ink-color);
+  font-family: "Merriweather", serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+
+  /* CSS Noise Texture for Paper Effect */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 2rem;
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  background-color: rgba(214, 69, 69, 0.1);
+}
+
+.paper-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  background: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}

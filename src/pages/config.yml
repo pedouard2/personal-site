@@ -1,0 +1,37 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  # 1. Career Timeline
+  - name: "career"
+    label: "Career Timeline"
+    folder: "src/content/career"
+    create: true
+    slug: "{{year}}-{{slug}}"
+    sortable_fields: ["startDate"]
+    fields:
+      - {label: "Type", name: "type", widget: "select", options: ["Work", "Education"], default: "Work"}
+      - {label: "Role / Title", name: "title", widget: "string"}
+      - {label: "Company", name: "company", widget: "string"}
+      - {label: "Start Date", name: "startDate", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false}
+      - {label: "End Date", name: "endDate", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, required: false, hint: "Leave empty if this is your current role"}
+      - {label: "Description", name: "body", widget: "markdown"}
+      - {label: "Company Logo", name: "image", widget: "image", required: false}
+
+  # 2. Album Reviews
+  - name: "reviews"
+    label: "Album Reviews"
+    folder: "src/content/reviews"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Album Title", name: "title", widget: "string"}
+      - {label: "Artist", name: "artist", widget: "string"}
+      - {label: "Cover Art", name: "cover", widget: "image"}
+      - {label: "Rating", name: "rating", widget: "number", value_type: "float", min: 0, max: 10, step: 0.1, hint: "Pitchfork style (e.g. 8.4)"}
+      - {label: "Review Date", name: "date", widget: "datetime"}
+      - {label: "Review Body", name: "body", widget: "markdown"}
