@@ -4,7 +4,7 @@ title: Software Development Intern
 company: Hooli
 startDate: 2016-06-01
 endDate: 2016-08-31
-image: /images/cornell-bear.png
+image: ../../assets/company-logos/cornell-bear.png
 ---
 
 Gained experience in a fast-paced agile environment.

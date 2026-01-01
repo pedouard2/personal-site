@@ -38,7 +38,7 @@ export default function PrimeTimeline({ events }) {
           {/* LOGO: Clean Tailwind classes */}
           {item.image && (
             <img
-              src={item.image}
+              src={item.image.src || item.image}
               alt={item.company}
               className="object-contain rounded bg-white p-0.5 border border-gray-100 w-[50px] h-[50px] shrink-0"
             />
