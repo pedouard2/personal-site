@@ -3,6 +3,8 @@
 import react from '@astrojs/react';
 import { defineConfig } from 'astro/config';
 
+import tailwindcss from '@tailwindcss/vite';
+
 // https://astro.build/config
 export default defineConfig({
   integrations: [react()],
@@ -11,9 +13,12 @@ export default defineConfig({
     optimizeDeps: {
       include: ['react-chrono', 'framer-motion'] 
     },
+
     // Sometimes necessary to stop Astro from trying to run it on the server
     ssr: {
       noExternal: ['react-chrono'] 
-    }
+    },
+
+    plugins: [tailwindcss()]
   }
 });

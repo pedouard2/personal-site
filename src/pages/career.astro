@@ -1,7 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import { marked } from "marked";
-import TimelineWrapper from "../components/TimelineWrapper.jsx";
+import PrimeTimeline from "../components/PrimeTimeline.jsx";
+import PaperLayout from "../layouts/PaperLayout.astro";
 
 // 1. Fetch
 const careerEntries = await getCollection("career");
@@ -11,9 +12,8 @@ const sortedCareer = careerEntries.sort(
   (a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf()
 );
 
-// 3. Map Items (MINIMAL DATA ONLY)
-// We purposely leave out cardTitle/cardSubtitle so we can build a better custom one.
-const items = sortedCareer.map((entry) => {
+// 3. Prepare Data Object (Clean JSON, not HTML strings)
+const events = sortedCareer.map((entry) => {
   const start = entry.data.startDate.toLocaleDateString("en-US", {
     month: "short",
     year: "numeric",
@@ -27,148 +27,25 @@ const items = sortedCareer.map((entry) => {
     : "Present";
 
   return {
-    title: `${start} - ${end}`, // Only the date stays on the axis
+    // Data for the Header
+    title: entry.data.title,
+    company: entry.data.company,
+    type: entry.data.type,
+    image: entry.data.image, // URL from public folder
+
+    // Data for the Axis (Opposite side)
+    date: `${start} - ${end}`,
+
+    // Data for the Body (Markdown parsed to HTML)
+    html: entry.body ? marked.parse(entry.body) : "",
   };
-});
-
-// 4. Build Custom Header + Body
-const renderedContents = sortedCareer.map((entry) => {
-  if (!entry.body) return "";
-
-  const bodyHtml = marked.parse(entry.body);
-
-  // LOGIC: Image Tag (Fixed Size)
-  const imageTag = entry.data.image
-    ? `<img src="${entry.data.image}" alt="${entry.data.company}" class="header-logo" />`
-    : "";
-
-  // STRUCTURE:
-  // [ Title + Company ]  <------- space between ------->  [ Logo ]
-  const headerHtml = `
-    <div class="custom-header-row">
-      <div class="header-text-group">
-        <h3 class="custom-title">${entry.data.title}</h3>
-        <div class="sub-row">
-          <span class="company-name">@ ${entry.data.company}</span>
-          <span class="badge ${entry.data.type.toLowerCase()}">${entry.data.type}</span>
-        </div>
-      </div>
-      ${imageTag}
-    </div>
-    <hr class="divider"/>
-  `;
-
-  return headerHtml + bodyHtml;
 });
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Career Timeline</title>
-  </head>
-  <body>
-    <h1>My Career</h1>
-    <TimelineWrapper
-      client:only="react"
-      items={items}
-      contents={renderedContents}
-    />
-  </body>
-</html>
+<PaperLayout title="Career Timeline">
+  <h1>My Career</h1>
 
-<style is:global>
-  html,
-  body {
-    height: 100%;
-    margin: 0;
-    font-family: sans-serif;
-  }
-
-  /* --- CUSTOM HEADER LAYOUT --- */
-  .custom-header-row {
-    display: flex;
-    justify-content: space-between; /* Pushes Logo to far right */
-    align-items: flex-start; /* Aligns top */
-    margin-bottom: 10px;
-  }
-
-  /* Left Side: Title & Company */
-  .header-text-group {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding-right: 15px; /* Prevent text hitting the logo */
-  }
-
-  .custom-title {
-    margin: 0;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #222;
-    line-height: 1.2;
-  }
-
-  .sub-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .company-name {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #555;
-  }
-
-  /* --- RIGHT SIDE: LOGO --- */
-  .header-logo {
-    width: 45px !important;
-    height: 45px !important;
-    object-fit: contain;
-    border-radius: 4px;
-    flex-shrink: 0; /* Prevents logo from squishing if text is long */
-    background: white;
-  }
-
-  /* --- BADGES --- */
-  .badge {
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-  }
-
-  .badge.work {
-    background-color: #e0f2fe;
-    color: #0369a1;
-  }
-  .badge.education {
-    background-color: #fce7f3;
-    color: #be185d;
-  }
-
-  .divider {
-    border: 0;
-    border-top: 1px solid #eee;
-    margin: 0 0 12px 0;
-  }
-
-  /* --- MARKDOWN BODY --- */
-  .chrono-content p {
-    margin-bottom: 0.8rem;
-    line-height: 1.6;
-    color: #333;
-  }
-
-  .chrono-content ul {
-    margin-left: 20px;
-    margin-bottom: 10px;
-  }
-
-  body {
-    overflow-y: hidden;
-  }
-</style>
+  <div class="wrapper">
+    <PrimeTimeline client:only="react" events={events} />
+  </div>
+</PaperLayout>
