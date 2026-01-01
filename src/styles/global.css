@@ -1,1 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap");
+
 @import "tailwindcss";
+
+@theme {
+  /*Spiced Earth Palette */
+  --color-background: #f9f8f4;
+  --color-surface: #e7e5e4;
+  --color-text: #1c1917;
+  --color-primary: #bc5d2e;
+  --color-accent: #4a5d23;
+
+  --font-serif: "Newsreader", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    line-height: 1.1;
+  }
+
+  h1 {
+    color: var(--color-primary);
+    font-size: 2.5rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: opacity 0.2s;
+  }
+
+  a:hover {
+    opacity: 0.8;
+  }
+}
