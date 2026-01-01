@@ -4,24 +4,19 @@ import reactPlugin from "eslint-plugin-react";
 import reactHooksPlugin from "eslint-plugin-react-hooks";
 
 export default [
-  // 1. Global ignores
   { ignores: ["dist", ".astro", "node_modules"] },
 
-  // 2. Astro Rules
   ...eslintPluginAstro.configs.recommended,
 
-  // 3. React Rules
   {
     files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
-    // vvvvv ADD THIS SECTION vvvvv
     languageOptions: {
       parserOptions: {
         ecmaFeatures: {
-          jsx: true, // <--- This fixes "Unexpected token <"
+          jsx: true,
         },
       },
     },
-    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     plugins: {
       react: reactPlugin,
       "react-hooks": reactHooksPlugin,
