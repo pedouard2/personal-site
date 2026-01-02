@@ -33,6 +33,7 @@ const events = sortedCareer.map((entry) => {
     date: `${start} - ${end}`,
 
     html: entry.body ? marked.parse(entry.body) : "",
+    skills: entry.data.tags || [],
   };
 });
 ---

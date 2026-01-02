@@ -14,6 +14,7 @@ const career = defineCollection({
       startDate: z.coerce.date(),
       endDate: z.coerce.date().optional(),
       image: image().optional(),
+      tags: z.array(z.string()).optional(),
     }),
 });
 const albumReviews = defineCollection({

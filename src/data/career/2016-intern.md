@@ -1,10 +1,11 @@
 ---
-type: Work
+type: Education
 title: Software Development Intern
 company: Hooli
 startDate: 2016-06-01
 endDate: 2016-08-31
 image: ../../assets/company-logos/cornell-bear.png
+tags: ["school", "tests", "yuh", "wagon", "html"]
 ---
 
 Gained experience in a fast-paced agile environment.
