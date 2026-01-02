@@ -1,23 +1,25 @@
 ---
-// import "@/styles/main.css";
+import Header from "../components/Header.jsx";
 import "../styles/global.css";
+
 const { title } = Astro.props;
 ---
 
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
   </head>
-  <body>
-    <div class="paper-container">
-      <header
-        style="margin-bottom: 3rem; border-bottom: 2px solid #eee; padding-bottom: 1rem;"
-      >
-        <h1 style="margin: 0; font-size: 1.5rem;">Prince</h1>
-      </header>
+
+  <body
+    class="bg-background text-text font-body antialiased selection:bg-secondary selection:text-black"
+  >
+    <Header client:load />
+
+    <main class="relative z-10 pt-24 px-6 max-w-5xl mx-auto">
       <slot />
-    </div>
+    </main>
   </body>
 </html>

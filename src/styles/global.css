@@ -1,54 +1,83 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
 @theme {
-  /*Spiced Earth Palette */
-  --color-background: #f9f8f4;
-  --color-surface: #e7e5e4;
-  --color-text: #1c1917;
-  --color-primary: #bc5d2e;
-  --color-accent: #4a5d23;
+  --color-background: #feffff;
 
-  --font-serif: "Newsreader", serif;
-  --font-sans: "Inter", sans-serif;
+  --color-text: #1a1c18;
+
+  --color-primary: #7574d8;
+
+  --color-secondary: #614080;
+
+  --font-heading: "Instrument Serif", serif;
+  --font-body: "Space Grotesk", sans-serif;
 }
 
 @layer base {
   body {
     background-color: var(--color-background);
     color: var(--color-text);
-    font-family: var(--font-sans);
-    line-height: 1.6;
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+
+    /* A subtle border around the whole page like a document */
+    border: 12px solid var(--color-text);
+    min-height: 100vh;
   }
 
   h1,
   h2,
   h3,
-  h4,
-  h5,
-  h6 {
-    font-family: var(--font-serif);
-    font-weight: 500;
-    line-height: 1.1;
+  h4 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    color: var(--color-text);
+    font-style: italic;
+    line-height: 1;
   }
 
   h1 {
-    color: var(--color-primary);
-    font-size: 2.5rem;
+    font-size: 5rem;
     letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+
+    text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    font-size: 3rem;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    border-top: 2px solid var(--color-text);
+    padding-top: 1rem;
+  }
+
+  p {
     margin-bottom: 1.5rem;
+    max-width: 60ch;
+    font-weight: 400;
   }
 
   a {
-    color: var(--color-primary);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    transition: opacity 0.2s;
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 700;
+    border-bottom: 2px solid var(--color-primary);
+    transition: all 0.2s ease;
+    padding-bottom: 1px;
   }
 
   a:hover {
-    opacity: 0.8;
+    background-color: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+  }
+
+  img {
+    border: 2px solid var(--color-text);
+    box-shadow: 6px 6px 0px var(--color-secondary);
   }
 }

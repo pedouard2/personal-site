@@ -4,15 +4,13 @@ import { marked } from "marked";
 import PrimeTimeline from "../components/PrimeTimeline.jsx";
 import PaperLayout from "../layouts/PaperLayout.astro";
 
-// 1. Fetch
 const careerEntries = await getCollection("career");
 
-// 2. Sort
 const sortedCareer = careerEntries.sort(
-  (a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf()
+  (a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf(),
 );
 
-// 3. Prepare Data Object (Clean JSON, not HTML strings)
+// Prepare Data Object (Clean JSON, not HTML strings)
 const events = sortedCareer.map((entry) => {
   const start = entry.data.startDate.toLocaleDateString("en-US", {
     month: "short",
@@ -27,24 +25,19 @@ const events = sortedCareer.map((entry) => {
     : "Present";
 
   return {
-    // Data for the Header
     title: entry.data.title,
     company: entry.data.company,
     type: entry.data.type,
-    image: entry.data.image, // URL from public folder
+    image: entry.data.image,
 
-    // Data for the Axis (Opposite side)
     date: `${start} - ${end}`,
 
-    // Data for the Body (Markdown parsed to HTML)
     html: entry.body ? marked.parse(entry.body) : "",
   };
 });
 ---
 
 <PaperLayout title="Career Timeline">
-  <h1>My Career</h1>
-
   <div class="wrapper">
     <PrimeTimeline client:only="react" events={events} />
   </div>

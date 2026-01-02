@@ -1,0 +1,113 @@
+/* 1. IMPORTS */
+/* Archivo Black (Heavy Posters) + Karla (Clean, legible, modern) */
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&family=Karla:ital,wght@0,400;0,700;1,400&display=swap");
+@import "tailwindcss";
+
+@theme {
+  /* --- THE WAVEDASH PALETTE --- */
+  --color-background: #110f16;
+  --color-surface: #1a1724;
+
+  --color-text: #e4e4d0;
+  --color-primary: #6c5ce7; /* Indigo */
+  --color-secondary: #fdcb6e; /* Gold */
+  --color-accent: #00d2d3; /* Shine Blue */
+
+  /* --- FONTS --- */
+  --font-heading: "Archivo Black", sans-serif;
+  --font-body: "Karla", sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 1.125rem; /* 18px - Great for reading reviews */
+    line-height: 1.6;
+    letter-spacing: -0.015em; /* Karla looks tighter and more professional with slight negative spacing */
+    overflow-x: hidden;
+  }
+
+  /* --- THE CRT GLOW --- */
+  /* Kept subtle so your Resume is still readable */
+  * {
+    text-shadow: 0 0 2px rgba(228, 228, 208, 0.1);
+  }
+
+  /* HEADINGS: The "Cover Story" Look */
+  /* Perfect for: "Experience", "Project A", "Radiohead Review" */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    font-weight: 400; /* Archivo Black is naturally bold, 400 is plenty */
+    text-transform: uppercase;
+    color: var(--color-text);
+
+    /* We keep the italic because it gives it that forward momentum/motion */
+    transform: skewX(
+      -4deg
+    ); /* A CSS trick to make it look fast without needing an italic font file */
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    line-height: 1;
+    /* The Indigo Shadow - Hard contrast for that "Sticker" look */
+    text-shadow: 4px 4px 0px var(--color-primary);
+    margin-bottom: 2rem;
+  }
+
+  h2 {
+    font-size: 2.25rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-accent); /* Make h2s (like "Work Experience") pop */
+  }
+
+  /* TEXT BLOCKS (For the Reviews/Resume descriptions) */
+  p {
+    margin-bottom: 1.5rem;
+    max-width: 65ch; /* Optimal reading width for your reviews */
+  }
+
+  /* LINKS: The "Highlighter" Look */
+  a {
+    color: var(--color-accent);
+    text-decoration: none;
+    border-bottom: 2px solid var(--color-primary);
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    font-weight: 700;
+  }
+
+  a:hover {
+    background-color: var(--color-primary);
+    color: #fff;
+    /* The box shadow here acts like a "glitch" highlight */
+    box-shadow: -4px 4px 0px var(--color-secondary);
+    transform: translateY(-2px);
+  }
+}
+
+/* --- THE SCANLINES --- */
+/* Kept exactly the same - adds texture to the dark background */
+.scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.2)
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.5; /* Slightly lowered opacity so resume text is clearer */
+}
