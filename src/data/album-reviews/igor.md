@@ -3,6 +3,7 @@ title: "IGOR"
 artist: "Tyler, The Creator"
 rating: 9.2
 date: 2019-05-17
+cover: ../../assets/album-covers/igor.jpg
 playlist:
   - title: "IGOR'S THEME"
     src: "/audio/igor/theme_clip.mp3"

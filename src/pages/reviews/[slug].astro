@@ -14,58 +14,69 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { title, artist, rating, playlist = [] } = entry.data;
+// Make sure to destructure 'cover' here
+const { title, artist, rating, cover, playlist = [] } = entry.data;
 const { Content } = await render(entry);
 ---
 
 <PaperLayout title={`${title} Review`}>
   <div class="max-w-6xl mx-auto px-6 py-12">
-    {/* HEADER */}
+    {/* HERO SECTION */}
     <header
-      class="mb-12 border-b-4 border-text pb-8 flex flex-col md:flex-row justify-between items-end gap-6"
+      class="mb-16 grid grid-cols-1 md:grid-cols-12 gap-12 items-end border-b-4 border-text pb-12"
     >
-      <div>
-        {/* 1. TITLE: Keep this clean and massive for readability */}
+      {/* LEFT: TEXT INFO (Span 7) */}
+      <div class="md:col-span-7 relative z-10">
         <h1
-          class="text-6xl md:text-8xl font-heading italic text-text leading-[0.8] mb-4"
+          class="text-6xl md:text-9xl font-heading italic text-text leading-[0.8] mb-6"
         >
           {title}
         </h1>
-
-        {/* 2. ARTIST: The "Mixtape Label" look */}
-        {/* We use style to force the var(--font-marker) variable */}
         <h2
-          class="text-3xl md:text-4xl text-text/80"
+          class="text-3xl md:text-5xl text-text/80"
           style="font-family: var(--font-marker);"
         >
           {artist}
         </h2>
       </div>
 
-      {/* 3. THE SCORE: The "Teacher's Grade" */}
-      {
-        rating && (
-          <div class="relative group">
-            {/* The Circle/Stamp Container */}
-            <div class="flex flex-col items-center justify-center w-32 h-32 border-4 border-text rounded-full bg-primary -rotate-12 shadow-[8px_8px_0px_var(--color-secondary)] transition-transform group-hover:rotate-0 group-hover:scale-110">
-              {/* The Number - using the Marker font */}
-              <span
-                class="text-6xl text-black leading-none mt-2"
-                style="font-family: var(--font-marker);"
-              >
-                {rating}
-              </span>
-            </div>
+      {/* RIGHT: ALBUM ART + SCORE (Span 5) */}
+      <div class="md:col-span-5 relative flex justify-center md:justify-end">
+        {/* The Album Cover (Tilted 'Sleeve') */}
+        {
+          cover && (
+            <div class="relative w-full max-w-md aspect-square bg-gray-900 border-4 border-text shadow-[16px_16px_0px_var(--color-primary)] rotate-3 hover:rotate-0 transition-transform duration-500">
+              <img
+                src={cover.src}
+                alt={`${title} Cover`}
+                class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+              />
 
-            {/* Optional: A little "Review" label below it */}
-            <span class="absolute -bottom-6 left-0 right-0 text-center font-mono text-xs uppercase tracking-widest opacity-50">
-              Score
-            </span>
-          </div>
-        )
-      }
+              {/* OPTIONAL: Vinyl Record peeking out the side */}
+              <div class="absolute top-2 bottom-2 -right-4 w-4 bg-black border-r-2 border-y-2 border-text -z-10 rounded-r-lg" />
+            </div>
+          )
+        }
+
+        {/* The Score Stamp (Overlapping the Art) */}
+        {
+          rating && (
+            <div class="absolute -bottom-6 -left-6 md:-left-12 z-20">
+              <div class="flex flex-col items-center justify-center w-32 h-32 md:w-40 md:h-40 border-4 border-text rounded-full bg-accent -rotate-12 shadow-[8px_8px_0px_black] group hover:scale-110 transition-transform">
+                <span
+                  class="text-6xl md:text-7xl text-black leading-none mt-2"
+                  style="font-family: var(--font-marker);"
+                >
+                  {rating}
+                </span>
+              </div>
+            </div>
+          )
+        }
+      </div>
     </header>
 
+    {/* AUDIO PLAYER + CONTENT */}
     <ReviewAudioController client:load playlist={playlist}>
       <div class="prose prose-xl prose-invert max-w-none font-body">
         <Content components={{ TrackTrigger }} />
