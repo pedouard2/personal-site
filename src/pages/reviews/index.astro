@@ -2,26 +2,99 @@
 import { getCollection } from "astro:content";
 import PaperLayout from "../../layouts/PaperLayout.astro";
 
+// Get reviews and sort by date (Newest first)
 const reviews = await getCollection("reviews");
+const sortedReviews = reviews.sort((a, b) => {
+  // Handle optional dates safely
+  const dateA = a.data.date || new Date(0);
+  const dateB = b.data.date || new Date(0);
+  return dateB.valueOf() - dateA.valueOf();
+});
 ---
 
-<PaperLayout title="Reviews">
-  <div class="max-w-4xl mx-auto px-6 py-12">
-    <h1 class="text-6xl font-heading italic mb-12">Reviews</h1>
+<PaperLayout title="Record Crate">
+  <div class="max-w-6xl mx-auto px-6 py-12">
+    {/* PAGE HEADER */}
+    <div class="mb-16 border-b-4 border-text pb-6 flex items-baseline gap-4">
+      <h1
+        class="text-6xl md:text-8xl font-heading italic text-text leading-none"
+      >
+        The Crate
+      </h1>
+      <span class="font-mono text-sm uppercase tracking-widest text-text/60">
+        {reviews.length} RECORDS
+      </span>
+    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    {/* THE GRID */}
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16"
+    >
       {
-        reviews.map((review) => (
-          <a
-            href={`/reviews/${review.id}`}
-            class="block border-2 border-text p-4 hover:bg-text hover:text-background transition-colors group"
-          >
-            <h2 class="text-3xl font-heading italic group-hover:translate-x-2 transition-transform">
-              {review.data.title}
-            </h2>
-            <p class="font-mono text-sm uppercase opacity-70">
-              {review.data.artist}
-            </p>
+        sortedReviews.map((review) => (
+          <a href={`/reviews/${review.id}`} class="group block relative">
+            {/* 1. THE CARD CONTAINER */}
+            <div
+              class="
+                bg-card border-2 border-text 
+                transition-transform duration-300 ease-out
+                group-hover:-translate-y-2 group-hover:rotate-1
+                shadow-[8px_8px_0px_var(--color-primary)]
+                group-hover:shadow-[12px_12px_0px_var(--color-secondary)]
+            "
+            >
+              {/* 2. COVER ART */}
+              <div class="aspect-square bg-gray-900 border-b-2 border-text relative overflow-hidden">
+                {review.data.cover ? (
+                  <img
+                    src={review.data.cover.src}
+                    alt={review.data.title}
+                    class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                  />
+                ) : (
+                  // Fallback pattern if no cover
+                  <div class="w-full h-full flex items-center justify-center bg-gray-800 relative">
+                    <span class="text-6xl">🎵</span>
+                  </div>
+                )}
+
+                {/* THE SCORE STAMP (Absolute Top Right) */}
+                {review.data.rating && (
+                  <div class="absolute top-2 right-2 w-12 h-12 bg-accent rounded-full border-2 border-text flex items-center justify-center rotate-12 group-hover:-rotate-12 transition-transform">
+                    <span
+                      class="text-lg text-black leading-none mt-1"
+                      style="font-family: var(--font-marker);"
+                    >
+                      {review.data.rating}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* 3. INFO */}
+              <div class="p-4">
+                <h2 class="text-2xl font-heading italic leading-none mb-2 truncate">
+                  {review.data.title}
+                </h2>
+                <p
+                  class="text-lg text-text/70 truncate"
+                  style="font-family: var(--font-marker);"
+                >
+                  {review.data.artist}
+                </p>
+
+                <div class="mt-4 flex justify-between items-center border-t border-text/10 pt-3">
+                  <span class="text-xs font-mono uppercase opacity-50">
+                    {review.data.date
+                      ? review.data.date.toLocaleDateString()
+                      : "Classic"}
+                  </span>
+                  <span class="text-xs font-bold uppercase tracking-widest group-hover:text-secondary transition-colors">
+                    Listen &rarr;
+                  </span>
+                </div>
+              </div>
+            </div>
           </a>
         ))
       }

@@ -88,3 +88,32 @@
     box-shadow: 6px 6px 0px var(--color-secondary);
   }
 }
+
+.track-trigger {
+  /* 1. SEPARATION: Add space between paragraphs */
+  margin-bottom: 3rem;
+
+  /* 2. LAYOUT: Make sure it behaves like a text block */
+  display: block;
+  position: relative;
+
+  /* 3. INTERACTION: The "Hover Line" visual */
+  padding-left: 1.5rem; /* Space for the border */
+  border-left: 4px solid transparent; /* Invisible border by default */
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* When you hover over the text, the line appears */
+.track-trigger:hover {
+  border-left-color: var(--color-primary); /* Cyan line */
+  padding-left: 2rem; /* Slight shift to the right */
+}
+
+/* Optional: Make the text slightly transparent until hovered */
+.track-trigger {
+  opacity: 0.8;
+}
+.track-trigger:hover {
+  opacity: 1;
+}

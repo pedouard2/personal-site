@@ -12,19 +12,18 @@ playlist:
     src: "/audio/igor/ithink_clip.mp3"
 ---
 
-<TrackTrigger index={0} client:visible>
+<div class="track-trigger" data-track-index="0">
   The album opens with a distorted synthesizer drone, immediately setting a
   gritty, unpolished tone. "IGOR'S THEME" isn't just an intro; it's a statement
-  of intent. The percussion is dry, heavy, and hits you right in the chest.
-</TrackTrigger>
+  of intent.
+</div>
 
-<TrackTrigger index={1} client:visible>
+<div class="track-trigger" data-track-index="1">
   Then suddenly, we shift gears. "EARFQUAKE" brings in that soulful, pleading
-  aesthetic. This is the radio hit, but it fits perfectly in the narrative. The
-  chords are lush, contrasting with the rough vocals.
-</TrackTrigger>
+  aesthetic. This is the radio hit, but it fits perfectly in the narrative.
+</div>
 
-<TrackTrigger index={2} client:visible>
+<div class="track-trigger" data-track-index="2">
   By the time we get to "I THINK", the groove is undeniable. It feels like a
-  deconstructed pop song from the 80s, run through a broken tape deck.
-</TrackTrigger>
+  deconstructed pop song from the 80s.
+</div>

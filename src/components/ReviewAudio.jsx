@@ -1,88 +1,125 @@
 import React, { useState, useEffect, useRef } from "react";
 
-// 1. THE TRIGGER COMPONENT (Use this inside your MDX/Text)
-export const TrackTrigger = ({ index, children, onVisible }) => {
-  const triggerRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // When this section crosses the center of the screen...
-        if (entry.isIntersecting) {
-          onVisible(index);
-        }
-      },
-      { rootMargin: "-45% 0px -45% 0px" }, // Trigger exactly in the middle
-    );
-
-    if (triggerRef.current) observer.observe(triggerRef.current);
-    return () => observer.disconnect();
-  }, [index, onVisible]);
-
+// 1. THE TRIGGER (Dumb Component)
+export const TrackTrigger = ({ index, children }) => {
   return (
-    <div ref={triggerRef} className={`transition-opacity duration-500`}>
+    <div
+      className="track-trigger border-l-4 border-transparent hover:border-text pl-4 transition-all duration-300 cursor-pointer"
+      data-track-index={index}
+      data-debug-check="true"
+    >
       {children}
     </div>
   );
 };
 
-// 2. THE MAIN WRAPPER & PLAYER
+// 2. THE CONTROLLER
 export default function ReviewAudioController({ playlist, children }) {
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
+  const containerRef = useRef(null);
 
-  const currentTrack = playlist[currentTrackIndex];
+  const currentTrack = playlist[currentIndex] || playlist[0];
 
-  // Handle Track Changes
+  // --- FIX: DEFINED BEFORE USEEFFECT ---
+  const changeTrack = (index, forcePlay = false) => {
+    setCurrentIndex((prev) => {
+      if (prev === index && !forcePlay) return prev;
+      return index;
+    });
+    if (forcePlay) setIsPlaying(true);
+  };
+
+  // --- THE DOM SCANNER ---
   useEffect(() => {
-    if (audioRef.current) {
-      // Simple cut for now.
-      // For a "Crossfade", we would need two audio elements blending volumes.
-      // This implementation switches sources and plays immediately if already playing.
-      audioRef.current.src = currentTrack.src;
-      if (isPlaying) {
-        audioRef.current.play();
-      }
+    if (!containerRef.current) return;
+
+    // DEBUG: Did we find the triggers?
+    const triggers = containerRef.current.querySelectorAll(".track-trigger");
+    console.log(`[AudioController] Found ${triggers.length} triggers.`);
+
+    if (triggers.length === 0) {
+      console.warn("⚠️ No triggers found! Check markdown HTML.");
     }
-  }, [currentTrackIndex]);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(
+              entry.target.getAttribute("data-track-index"),
+            );
+            if (!isNaN(index)) {
+              console.log(`[Audio] Triggered Track #${index}`);
+              changeTrack(index); // Now this works because function is defined above
+            }
+          }
+        });
+      },
+      {
+        // Laser Tripwire: Middle of screen
+        rootMargin: "-50% 0px -50% 0px",
+        threshold: 0,
+      },
+    );
+
+    triggers.forEach((trigger) => {
+      observer.observe(trigger);
+      // Click listener backup
+      trigger.onclick = () => {
+        const idx = parseInt(trigger.getAttribute("data-track-index"));
+        changeTrack(idx, true);
+      };
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  // --- AUDIO PLAYBACK HANDLER ---
+  useEffect(() => {
+    if (audioRef.current && isPlaying) {
+      audioRef.current.play().catch((e) => console.log("Autoplay blocked", e));
+    }
+  }, [currentIndex, isPlaying]);
 
   const togglePlay = () => {
-    if (audioRef.current.paused) {
-      audioRef.current.play();
-      setIsPlaying(true);
-    } else {
+    if (isPlaying) {
       audioRef.current.pause();
       setIsPlaying(false);
+    } else {
+      audioRef.current.play();
+      setIsPlaying(true);
     }
   };
 
   return (
-    <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-12">
-      {/* --- LEFT: STICKY PLAYER --- */}
+    <div
+      ref={containerRef}
+      className="relative grid grid-cols-1 lg:grid-cols-12 gap-12"
+    >
+      {/* SIDEBAR PLAYER */}
       <aside className="lg:col-span-4 lg:h-[calc(100vh-100px)] lg:sticky lg:top-24 flex flex-col">
-        {/* The Tape Deck UI */}
-        <div className="bg-card border-2 border-text shadow-[8px_8px_0px_var(--color-primary)] p-6 relative overflow-hidden group">
-          {/* Spinning Cassette / Visual Decor */}
+        <div className="bg-card border-2 border-text shadow-[8px_8px_0px_var(--color-primary)] p-6 transition-all duration-300">
+          {/* Spinning Disc */}
           <div
             className={`
-                w-full aspect-square bg-gray-900 rounded-full border-4 border-text mb-6 flex items-center justify-center relative
-                ${isPlaying ? "animate-[spin_4s_linear_infinite]" : ""}
-            `}
+                  w-full aspect-square bg-gray-900 rounded-full border-4 border-text mb-6 flex items-center justify-center relative shadow-inner
+                  ${isPlaying ? "animate-[spin_4s_linear_infinite]" : ""}
+              `}
           >
-            <div className="w-1/3 h-1/3 bg-card border-2 border-text rounded-full"></div>
-            {/* Tape markers */}
-            <div className="absolute top-2 bottom-2 w-1 bg-text/20"></div>
-            <div className="absolute left-2 right-2 h-1 bg-text/20"></div>
+            <div className="w-1/3 h-1/3 bg-primary border-2 border-text rounded-full flex items-center justify-center">
+              <div className="w-2 h-2 bg-black rounded-full"></div>
+            </div>
           </div>
 
-          {/* Track Info */}
+          {/* Info */}
           <div className="text-center mb-6">
-            <h3 className="font-heading italic text-2xl leading-none mb-2">
-              {currentTrack.title}
+            <h3 className="font-heading italic text-2xl leading-none mb-2 truncate">
+              {currentTrack?.title}
             </h3>
             <div className="text-xs font-mono uppercase tracking-widest text-text/60">
-              Track {currentTrackIndex + 1} / {playlist.length}
+              Track {currentIndex + 1} / {playlist.length}
             </div>
           </div>
 
@@ -91,48 +128,19 @@ export default function ReviewAudioController({ playlist, children }) {
             onClick={togglePlay}
             className="w-full py-4 bg-text text-background font-bold uppercase tracking-widest hover:bg-primary hover:text-white transition-colors border-2 border-transparent hover:border-text"
           >
-            {isPlaying ? "PAUSE" : "PLAY TAPE"}
+            {isPlaying ? "PAUSE" : "PLAY"}
           </button>
 
-          {/* Hidden Audio Element */}
-          <audio ref={audioRef} loop={false} />
-        </div>
-
-        {/* Visualizer / Note */}
-        <div className="mt-6 border-l-4 border-text/20 pl-4 hidden lg:block">
-          <p className="text-sm text-text/60 italic">
-            Scroll to change tracks.
-            <br />
-            Turn volume up.
-          </p>
+          <audio
+            ref={audioRef}
+            src={currentTrack?.src}
+            onEnded={() => setIsPlaying(false)}
+          />
         </div>
       </aside>
 
-      {/* --- RIGHT: SCROLLY CONTENT --- */}
-      <main className="lg:col-span-8">
-        {/* We clone the children (the MDX content) to inject the 'onVisible' prop 
-           Wait... MDX is static. We need to wrap the MDX sections manually.
-        */}
-        {/* Actually, to make this easier for you:
-            We will render the 'TrackTrigger' inside the MDX, 
-            but we need to pass the 'setCurrentTrackIndex' down to them.
-            
-            The cleanest way in Astro + React hybrid is to pass a function 
-            to the children if they are React components, 
-            BUT since MDX renders as static HTML mostly, 
-            we will use a Render Prop pattern for the content area.
-         */}
-
-        {/* Simple solution: Render children, but use a Context or a mapped wrapper */}
-        {React.Children.map(children, (child) => {
-          if (React.isValidElement(child)) {
-            return React.cloneElement(child, {
-              onVisible: setCurrentTrackIndex,
-            });
-          }
-          return child;
-        })}
-      </main>
+      {/* CONTENT */}
+      <main className="lg:col-span-8">{children}</main>
     </div>
   );
 }
