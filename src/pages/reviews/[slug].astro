@@ -1,0 +1,75 @@
+---
+import { getCollection, render } from "astro:content";
+import PaperLayout from "../../layouts/PaperLayout.astro";
+import ReviewAudioController, {
+  TrackTrigger,
+} from "../../components/ReviewAudio.jsx";
+
+export async function getStaticPaths() {
+  const reviews = await getCollection("reviews");
+  return reviews.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { title, artist, rating, playlist = [] } = entry.data;
+const { Content } = await render(entry);
+---
+
+<PaperLayout title={`${title} Review`}>
+  <div class="max-w-6xl mx-auto px-6 py-12">
+    {/* HEADER */}
+    <header
+      class="mb-12 border-b-4 border-text pb-8 flex flex-col md:flex-row justify-between items-end gap-6"
+    >
+      <div>
+        {/* 1. TITLE: Keep this clean and massive for readability */}
+        <h1
+          class="text-6xl md:text-8xl font-heading italic text-text leading-[0.8] mb-4"
+        >
+          {title}
+        </h1>
+
+        {/* 2. ARTIST: The "Mixtape Label" look */}
+        {/* We use style to force the var(--font-marker) variable */}
+        <h2
+          class="text-3xl md:text-4xl text-text/80"
+          style="font-family: var(--font-marker);"
+        >
+          {artist}
+        </h2>
+      </div>
+
+      {/* 3. THE SCORE: The "Teacher's Grade" */}
+      {
+        rating && (
+          <div class="relative group">
+            {/* The Circle/Stamp Container */}
+            <div class="flex flex-col items-center justify-center w-32 h-32 border-4 border-text rounded-full bg-primary -rotate-12 shadow-[8px_8px_0px_var(--color-secondary)] transition-transform group-hover:rotate-0 group-hover:scale-110">
+              {/* The Number - using the Marker font */}
+              <span
+                class="text-6xl text-black leading-none mt-2"
+                style="font-family: var(--font-marker);"
+              >
+                {rating}
+              </span>
+            </div>
+
+            {/* Optional: A little "Review" label below it */}
+            <span class="absolute -bottom-6 left-0 right-0 text-center font-mono text-xs uppercase tracking-widest opacity-50">
+              Score
+            </span>
+          </div>
+        )
+      }
+    </header>
+
+    <ReviewAudioController client:load playlist={playlist}>
+      <div class="prose prose-xl prose-invert max-w-none font-body">
+        <Content components={{ TrackTrigger }} />
+      </div>
+    </ReviewAudioController>
+  </div>
+</PaperLayout>
