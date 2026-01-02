@@ -1,17 +1,22 @@
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Sedgwick+Ave&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --color-background: #feffff;
+  --color-background: #1a1724;
 
-  --color-text: #1a1c18;
+  --color-card: #110f16;
 
-  --color-primary: #7574d8;
+  --color-text: #e4e4d0;
 
-  --color-secondary: #614080;
+  --color-primary: #00d2d3;
 
-  --font-heading: "Instrument Serif", serif;
-  --font-body: "Space Grotesk", sans-serif;
+  --color-secondary: #6c5ce7;
+
+  --font-heading: "Inter", "sans-serif";
+
+  --font-body: "Inter", "sans-serif";
+
+  --font-marker: "Sedgwick Ave", "cursive";
 }
 
 @layer base {
@@ -24,7 +29,7 @@
     -webkit-font-smoothing: antialiased;
 
     /* A subtle border around the whole page like a document */
-    border: 12px solid var(--color-text);
+    border: 12px solid var(--color-card);
     min-height: 100vh;
   }
 
