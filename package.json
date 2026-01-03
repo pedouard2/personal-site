@@ -1,5 +1,6 @@
 {
   "name": "personal-site",
+  "packageManager": "pnpm@10.26.1",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
