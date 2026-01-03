@@ -41,12 +41,12 @@ export default function PrimeTimeline({ events }) {
           </div>
 
           {/* BODY PREVIEW */}
-          <div className="relative mb-3">
+          {/* <div className="relative mb-3">
             <div
               className="prose prose-sm max-w-none text-gray-600 line-clamp-2 leading-snug"
               dangerouslySetInnerHTML={{ __html: item.html }}
             />
-          </div>
+          </div> */}
 
           {/* FOOTER: PREVIEW SKILLS (Max 4) */}
           {visibleSkills.length > 0 && (
