@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Sedgwick+Ave&display=swap");
+
 @import "tailwindcss";
 
 @theme {
@@ -24,14 +25,21 @@
 @layer base {
   body {
     background-color: var(--color-background);
+
     color: var(--color-text);
+
     font-family: var(--font-body);
+
     font-size: 1.125rem;
+
     line-height: 1.5;
+
     -webkit-font-smoothing: antialiased;
 
     /* A subtle border around the whole page like a document */
+
     border: 12px solid var(--color-card);
+
     min-height: 100vh;
   }
 
@@ -40,15 +48,21 @@
   h3,
   h4 {
     font-family: var(--font-heading);
+
     font-weight: 400;
+
     color: var(--color-text);
+
     font-style: italic;
+
     line-height: 1;
   }
 
   h1 {
     font-size: 5rem;
+
     letter-spacing: -0.02em;
+
     margin-bottom: 2rem;
 
     text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1);
@@ -56,39 +70,50 @@
 
   h2 {
     font-size: 3rem;
+
     margin-top: 3rem;
+
     margin-bottom: 1rem;
+
     border-top: 2px solid var(--color-text);
+
     padding-top: 1rem;
   }
 
   p {
     margin-bottom: 1.5rem;
+
     max-width: 60ch;
+
     font-weight: 400;
   }
 
   a {
     color: var(--color-text);
+
     text-decoration: none;
+
     font-weight: 700;
+
     border-bottom: 2px solid var(--color-primary);
+
     transition: all 0.2s ease;
+
     padding-bottom: 1px;
   }
 
   a:hover {
-    background-color: var(--color-primary);
     color: #fff;
+
     border-color: var(--color-primary);
   }
 
   img {
     border: 2px solid var(--color-text);
+
     box-shadow: 6px 6px 0px var(--color-secondary);
   }
 }
-
 .track-trigger {
   /* 1. SEPARATION: Add space between paragraphs */
   margin-bottom: 3rem;
